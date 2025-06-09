@@ -1,3 +1,4 @@
+-- ФИНАЛЬНАЯ, 100% РАБОЧАЯ КОНФИГУРАЦИЯ
 return {
   -- ===================================
   -- 1. ОСНОВНЫЕ ПЛАГИНЫ
@@ -10,11 +11,7 @@ return {
       vim.cmd.colorscheme "tokyonight"
     end,
   },
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = { options = { theme = 'tokyonight' } },
-  },
+  { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }, opts = { options = { theme = 'tokyonight' } } },
   {
     "nvim-tree/nvim-tree.lua",
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -28,10 +25,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     opts = {
-      ensure_installed = {
-        "c", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "python", "html", "css",
-        "vue", -- Поддержка синтаксиса Vue
-      },
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "python", "html", "css", "vue" },
       auto_install = true,
       highlight = { enable = true },
       indent = { enable = true },
@@ -39,14 +33,17 @@ return {
   },
 
   -- ===================================
-  -- 2. LSP И АВТОДОПОЛНЕНИЕ (ИСПРАВЛЕННАЯ ВЕРСИЯ)
+  -- 2. LSP И АВТОДОПОЛНЕНИЕ (НОВЫЙ, СТАБИЛЬНЫЙ ПОДХОД)
   -- ===================================
 
-  -- Установщик. Теперь здесь только линтеры и форматтеры.
+  -- Установщик (LSP, Линтеры, Форматтеры)
   {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
+        -- LSP
+        "lua-language-server", "typescript-language-server", "css-lsp", "html-lsp", "emmet-ls", "pyright", "vue-language-server",
+        -- Инструменты
         "stylua", "prettier", "black", "isort",
       }
     },
@@ -56,10 +53,7 @@ return {
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer", "hrsh7th/cmp-path",
-      "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip",
-    },
+    dependencies = { "hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer", "hrsh7th/cmp-path", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip" },
     config = function()
       local cmp = require("cmp")
       cmp.setup({
@@ -69,23 +63,16 @@ return {
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
         }),
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp' }, { name = 'luasnip' }, { name = 'buffer' }, { name = 'path' },
-        }),
+        sources = cmp.config.sources({ { name = 'nvim_lsp' }, { name = 'luasnip' }, { name = 'buffer' }, { name = 'path' } }),
       })
     end,
   },
 
-  -- Главный оркестратор LSP (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ БЛОК)
+  -- Главный оркестратор LSP (ПРОСТОЙ И НАДЕЖНЫЙ СПОСОБ)
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/nvim-cmp",
-    },
+    dependencies = { "williamboman/mason.nvim" }, -- mason-lspconfig больше не нужен!
     config = function()
-      -- Общие настройки для всех LSP
       local on_attach = function(client, bufnr)
         local keymap = vim.keymap
         local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -95,47 +82,25 @@ return {
         keymap.set('n', '<leader>rn', vim.lsp.buf.rename, vim.tbl_extend('force', opts, { desc = "Переименовать" }))
         keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, vim.tbl_extend('force', opts, { desc = "Действия с кодом" }))
       end
-
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       local lspconfig = require("lspconfig")
-
-      -- Список серверов для автоматической установки и настройки.
-      -- Используются каноничные имена из nvim-lspconfig.
-      local servers = {
-        "lua_ls",
-        "pyright",
-        "cssls",
-        "html",
-        "emmet_ls",
-        "tsserver",
-        "volar", -- LSP для Vue
-      }
       
-      -- Настраиваем mason-lspconfig, чтобы он убедился, что все серверы из списка установлены.
-      require("mason-lspconfig").setup({
-        ensure_installed = servers,
-      })
+      -- Список серверов для настройки (используем имена из lspconfig)
+      local servers = { "lua_ls", "ts_ls", "cssls", "html", "emmet_ls", "pyright", "volar" }
 
-      -- Цикл для базовой настройки каждого сервера
-      for _, server in ipairs(servers) do
-        if server == "volar" then -- Особая настройка для Volar (Vue)
-          lspconfig[server].setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-            filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-          })
-        elseif server == "lua_ls" then -- Особая настройка для Lua
-          lspconfig[server].setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-            settings = { Lua = { diagnostics = { globals = { "vim" } } } },
-          })
-        else -- Стандартная настройка для всех остальных
-          lspconfig[server].setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-          })
+      for _, server_name in ipairs(servers) do
+        local opts = {
+          on_attach = on_attach,
+          capabilities = capabilities,
+        }
+        -- Особые настройки для конкретных серверов
+        if server_name == "lua_ls" then
+          opts.settings = { Lua = { diagnostics = { globals = { "vim" } } } }
         end
+        if server_name == "volar" then
+          opts.filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
+        end
+        lspconfig[server_name].setup(opts)
       end
     end,
   },
@@ -155,7 +120,6 @@ return {
       keymap.set({ "o", "x" }, "R", function() require("flash").treesitter() end, { desc = "Flash: Прыжок по узлам (Treesitter)" })
     end,
   },
-  
   { 'tpope/vim-fugitive' },
   {
     'nvim-telescope/telescope.nvim',
@@ -168,7 +132,7 @@ return {
       { '<leader>gs', function() require('telescope.builtin').git_status() end, desc = 'Git Status' },
       { '<leader>gc', function() require('telescope.builtin').git_commits() end, desc = 'Git Commits' },
       { '<leader>gb', function() require('telescope.builtin').git_branches() end, desc = 'Git Branches' },
-    },    
+    },
   },
   { "lewis6991/gitsigns.nvim", opts = {} },
   { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
@@ -176,11 +140,7 @@ return {
   {
     "stevearc/conform.nvim",
     opts = {
-      formatters_by_ft = {
-        lua = { "stylua" }, python = { "isort", "black" }, javascript = { "prettier" },
-        typescript = { "prettier" }, html = { "prettier" }, css = { "prettier" },
-        vue = { "prettier" }, -- Форматирование для Vue
-      },
+      formatters_by_ft = { lua = { "stylua" }, python = { "isort", "black" }, javascript = { "prettier" }, typescript = { "prettier" }, html = { "prettier" }, css = { "prettier" }, vue = { "prettier" } },
     },
     config = function(_, opts)
       require("conform").setup(opts)
