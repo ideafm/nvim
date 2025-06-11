@@ -3,7 +3,7 @@
 local keymap = vim.keymap
 
 -- Выход из режима вставки
-keymap.set("i", "jk", "<ESC>", { desc = "Выход из режима вставки" })
+keymap.set("i", "kj", "<ESC>", { desc = "Выход из режима вставки" })
 
 -- Навигация по окнам
 keymap.set("n", "<C-h>", "<C-w>h", { desc = "Перейти в окно слева" })
@@ -48,17 +48,9 @@ keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split Horizontally" }) -- Ра
 keymap.set("n", "<leader>sq", "<C-w>q", { desc = "Quit window" }) -- Закрыть окно
 
 
--- Работа с вкладками
-keymap.set("n", "<leader>tn", ":tabnew<CR>", { desc = "New Tab" }) -- Новая вкладка
-keymap.set("n", "<leader>tc", ":tabclose<CR>", { desc = "Close Tab" }) -- Закрыть вкладку
-keymap.set("n", "<leader>t]", "gt", { desc = "Next Tab" }) -- Следующая вкладка
-keymap.set("n", "<leader>t[", "gT", { desc = "Previous Tab" }) -- Предыдущая вкладка
+-- Работа с вкладками (НОВЫЙ, БЫСТРЫЙ СПОСОБ)
+keymap.set("n", "L", ":tabnext<CR>", { desc = "Следующая вкладка" })
+keymap.set("n", "H", ":tabprevious<CR>", { desc = "Предыдущая вкладка" })
+keymap.set("n", "<leader>tn", ":tabnew<CR>", { desc = "New Tab" })
+keymap.set("n", "<leader>tc", ":tabclose<CR>", { desc = "Close Tab" })
 
--- Сохранение файла по Cmd+S в разных режимах
-keymap.set({"n", "i", "v"}, "<D-s>", "<cmd>w<CR>", { desc = "Сохранить файл" })
-
--- Git с помощью Telescope
--- Вместо 'fugitive git_status' используем встроенные функции
--- vim.keymap.set("n", "<leader>gs", require('telescope.builtin').git_status, { desc = "Git Status" })
--- vim.keymap.set("n", "<leader>gc", require('telescope.builtin').git_commits, { desc = "Git Commits" })
--- vim.keymap.set("n", "<leader>gb", require('telescope.builtin').git_branches, { desc = "Git Branches" })
