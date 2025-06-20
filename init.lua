@@ -1,4 +1,6 @@
--- ~/.config/nvim/init.lua
+-- ~/.config/nvim/init.lua (ИСПРАВЛЕННАЯ ВЕРСИЯ)
+
+-- Загружаем основные настройки и кеймапы
 require("core.options")
 require("core.keymaps")
 
@@ -18,5 +20,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Загружаем lazy и указываем, где лежат наши плагины
+-- Загружаем lazy и указываем, где лежат наши плагины (в папке lua/plugins)
 require("lazy").setup("plugins")
+

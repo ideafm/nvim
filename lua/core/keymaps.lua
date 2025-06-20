@@ -18,39 +18,35 @@ keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Сузить о
 keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Расширить окно" })
 
 -- Навигация по буферам
-keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Следующий буфер" })
-keymap.set("n", "<S-h>", ":bprevious<CR>", { desc = "Предыдущий буфер" })
+keymap.set("n", "<S-L>", ":bnext<CR>", { desc = "Следующий буфер" })
+keymap.set("n", "<S-H>", ":bprevious<CR>", { desc = "Предыдущий буфер" })
+keymap.set("n", "<leader>q", "<cmd>bdelete<CR>", { desc = "Закрыть буфер" })
 
-
--- Быстрое перемещение по вертикали
+-- Быстрое перемещение по вертикали (чтобы не конфликтовать с K для LSP)
 keymap.set("n", "J", "5j", { desc = "Спуститься на 5 строк" })
 keymap.set("n", "K", "5k", { desc = "Подняться на 5 строк" })
 
 -- Удерживание центра экрана при перемещении
 keymap.set("n", "<C-d>", "<C-d>zz")
 keymap.set("n", "<C-u>", "<C-u>zz")
--- При поиске также центрировать результат
 keymap.set("n", "n", "nzz")
 keymap.set("n", "N", "Nzz")
 
--- Закрыть буфер
-keymap.set("n", "<leader>q", ":bdelete<CR>", { desc = "Закрыть буфер" })
-
--- Очистка подсветки поиска по двойному Esc
-keymap.set("n", "<C-l>", "<cmd>nohlsearch<CR>", { noremap = true, silent = true, desc = "Очистить подсветку/перерисовать экран" })
-
--- Переход к файлу под курсором
-keymap.set("n", "<leader>gf", "gf", { desc = "[G]oto [F]ile" })
+-- Очистка подсветки поиска / перерисовка экрана
+keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<CR>", { desc = "Очистить подсветку" })
 
 -- Работа с окнами (сплитами)
-keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split Vertically" }) -- Разделить окно вертикально
-keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split Horizontally" }) -- Разделить окно горизонтально
-keymap.set("n", "<leader>sq", "<C-w>q", { desc = "Quit window" }) -- Закрыть окно
+keymap.set("n", "<leader>sv", "<C-w>v", { desc = "[S]plit [V]ertically" })
+keymap.set("n", "<leader>sh", "<C-w>s", { desc = "[S]plit [H]orizontally" })
+keymap.set("n", "<leader>sq", "<C-w>q", { desc = "[S]plit [Q]uit" })
 
+-- Работа с вкладками (tabs)
+keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "[T]ab [N]ew" })
+keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "[T]ab [C]lose" })
+keymap.set("n", "L", "<cmd>tabnext<CR>", { desc = "Следующая вкладка" })
+keymap.set("n", "H", "<cmd>tabprevious<CR>", { desc = "Предыдущая вкладка" })
 
--- Работа с вкладками (НОВЫЙ, БЫСТРЫЙ СПОСОБ)
-keymap.set("n", "L", ":tabnext<CR>", { desc = "Следующая вкладка" })
-keymap.set("n", "H", ":tabprevious<CR>", { desc = "Предыдущая вкладка" })
-keymap.set("n", "<leader>tn", ":tabnew<CR>", { desc = "New Tab" })
-keymap.set("n", "<leader>tc", ":tabclose<CR>", { desc = "Close Tab" })
-
+-- LSP Диагностика
+keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "К предыдущей ошибке" })
+keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "К следующей ошибке" })
+keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Показать ошибку в окне" })

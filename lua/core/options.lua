@@ -2,6 +2,9 @@
 
 local opt = vim.opt
 
+-- Устанавливаем <Leader> на пробел. Делаем это в самом начале!
+vim.g.mapleader = " "
+
 -- Номера строк
 opt.relativenumber = true -- Относительные номера строк
 opt.number = true         -- Текущая строка имеет абсолютный номер
@@ -28,8 +31,6 @@ opt.undodir = vim.fn.stdpath("data") .. "/undodir" -- Место для исто
 opt.undofile = true -- Сохранять историю отмен между сессиями
 
 opt.scrolloff = 8 -- Оставлять 8 строк выше/ниже курсора при скролле
-
-vim.g.mapleader = " " -- Устанавливаем <Leader> на пробел. Это очень важно!
 
 -- Использовать системный буфер обмена
 opt.clipboard = "unnamedplus"
