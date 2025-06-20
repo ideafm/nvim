@@ -43,8 +43,8 @@ keymap.set("n", "<leader>sq", "<C-w>q", { desc = "[S]plit [Q]uit" })
 -- Работа с вкладками (tabs)
 keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "[T]ab [N]ew" })
 keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "[T]ab [C]lose" })
-keymap.set("n", "L", "<cmd>tabnext<CR>", { desc = "Следующая вкладка" })
-keymap.set("n", "H", "<cmd>tabprevious<CR>", { desc = "Предыдущая вкладка" })
+-- keymap.set("n", "L", "<cmd>tabnext<CR>", { desc = "Следующая вкладка" })
+-- keymap.set("n", "H", "<cmd>tabprevious<CR>", { desc = "Предыдущая вкладка" })
 
 -- LSP Диагностика
 keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "К предыдущей ошибке" })

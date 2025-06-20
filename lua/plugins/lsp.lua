@@ -57,7 +57,7 @@ return {
         local keymap = vim.keymap
         local opts = { noremap = true, silent = true, buffer = bufnr }
         keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Перейти к определению" }))
-        keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Показать документацию" }))
+        -- keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Показать документацию" }))
         keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Действия с кодом" }))
       end
       
